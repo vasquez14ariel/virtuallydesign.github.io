@@ -1,0 +1,1994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gumroad Tutorial — @VirtuAlly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0d0d0f;
+  --cream: #f5f0e8;
+  --gold: #c8a96e;
+  --gold-light: #e8d5a8;
+  --teal: #1a7a6e;
+  --teal-light: #2aa090;
+  --rust: #c4522a;
+  --muted: #7a7570;
+  --card-bg: #ffffff;
+  --border: rgba(13,13,15,0.1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Instrument Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ── NAV (identical to VirtuAlly) ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 4rem;
+  background: rgba(245,240,232,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav-logo span { color: var(--teal); }
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--teal); }
+
+.nav-cta {
+  background: var(--ink);
+  color: var(--cream) !important;
+  padding: 0.6rem 1.4rem;
+  border-radius: 100px;
+  font-weight: 600 !important;
+  transition: background 0.2s !important;
+}
+.nav-cta:hover { background: var(--teal) !important; color: white !important; }
+
+/* ── PROGRESS BAR ── */
+.progress-bar-line {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  z-index: 200;
+  transition: width 0.1s linear;
+  width: 0%;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 8rem 4rem 5rem;
+  gap: 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(26,122,110,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal);
+  background: rgba(26,122,110,0.1);
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  margin-bottom: 1.5rem;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+}
+.hero h1 em { font-style: italic; color: var(--teal); }
+
+.hero-sub {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 420px;
+  margin-bottom: 2.5rem;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.85rem 2rem;
+  border-radius: 100px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.01em;
+}
+.btn-primary:hover { background: var(--teal); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,122,110,0.25); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--ink);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.85rem 2rem;
+  border-radius: 100px;
+  text-decoration: none;
+  border: 1.5px solid var(--ink);
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.btn-secondary:hover { background: var(--ink); color: var(--cream); }
+
+.hero-stats {
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--ink);
+  display: block;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Hero Visual — TOC Card */
+.hero-visual {
+  position: relative;
+  height: 520px;
+}
+
+.card-float {
+  position: absolute;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  animation: float 6s ease-in-out infinite;
+}
+.card-float:nth-child(2) { animation-delay: -2s; }
+.card-float:nth-child(3) { animation-delay: -4s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+.card-main { top: 30px; left: 10px; width: 290px; }
+.card-small { top: 300px; left: 220px; width: 210px; padding: 1.25rem; }
+.card-accent { top: 140px; left: 50px; width: 230px; padding: 1rem 1.25rem; background: var(--ink); color: white; }
+
+.card-tag {
+  display: inline-block;
+  background: var(--teal);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border-radius: 100px;
+  margin-bottom: 0.75rem;
+}
+.card-tag.gold { background: rgba(200,169,110,0.2); color: #9a7a3a; }
+
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  color: var(--ink);
+}
+.card-accent .card-title { color: white; font-size: 0.85rem; }
+
+.toc-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 0.75rem;
+}
+.toc-mini-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.toc-mini-dot {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: rgba(26,122,110,0.12);
+  color: var(--teal);
+  font-size: 0.6rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: 'Syne', sans-serif;
+}
+
+.step-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+  margin-top: 0.75rem;
+}
+.step-cell {
+  height: 26px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.5);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+}
+.step-cell.active { background: var(--teal); color: white; }
+.step-cell.gold-active { background: var(--gold); color: var(--ink); }
+
+/* ── TRUST BAR ── */
+.trust-bar {
+  background: var(--ink);
+  padding: 1.25rem 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: rgba(245,240,232,0.5);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.trust-item span:first-child { color: var(--gold); font-size: 1rem; }
+
+/* ── SHARED SECTION ── */
+section { padding: 6rem 4rem; }
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 1rem;
+}
+.section-label::before {
+  content: '';
+  width: 24px; height: 2px;
+  background: var(--teal);
+}
+
+.section-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  max-width: 640px;
+}
+.section-headline em { font-style: italic; color: var(--teal); }
+
+.section-sub {
+  font-size: 1.05rem;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 560px;
+  margin-top: 1rem;
+}
+
+/* ── OVERVIEW (like About section) ── */
+.overview {
+  background: white;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+}
+
+.overview-visual {
+  position: relative;
+  height: 420px;
+}
+
+.overview-blob {
+  position: absolute;
+  width: 320px; height: 320px;
+  background: linear-gradient(135deg, rgba(26,122,110,0.12), rgba(200,169,110,0.15));
+  border-radius: 60% 40% 70% 30% / 40% 60% 30% 70%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: morph 8s ease-in-out infinite;
+}
+
+@keyframes morph {
+  0%, 100% { border-radius: 60% 40% 70% 30% / 40% 60% 30% 70%; }
+  25% { border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%; }
+  50% { border-radius: 30% 70% 40% 60% / 50% 50% 40% 60%; }
+  75% { border-radius: 50% 50% 60% 40% / 30% 70% 50% 50%; }
+}
+
+.overview-metric {
+  position: absolute;
+  background: white;
+  border-radius: 16px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  text-align: center;
+}
+.overview-metric:nth-child(2) { top: 30px; left: 20px; }
+.overview-metric:nth-child(3) { top: 50px; right: 10px; }
+.overview-metric:nth-child(4) { bottom: 50px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+
+.metric-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--teal);
+  display: block;
+}
+.metric-label { font-size: 0.75rem; color: var(--muted); }
+
+.uvp-cards {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+.uvp-card {
+  background: var(--cream);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.uvp-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.07); }
+
+.uvp-icon {
+  width: 44px; height: 44px;
+  background: var(--teal);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+.uvp-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.35rem;
+  color: var(--ink);
+}
+.uvp-desc {
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── STEPS SECTION (like Courses) ── */
+.steps-section { background: var(--cream); }
+
+.steps-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  gap: 2rem;
+}
+
+.phase-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+.tab {
+  padding: 0.5rem 1.25rem;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-family: 'Instrument Sans', sans-serif;
+  transition: all 0.2s;
+}
+.tab.active, .tab:hover {
+  background: var(--ink);
+  color: var(--cream);
+  border-color: var(--ink);
+}
+
+/* Step Cards (styled like product cards) */
+.step-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.25s, box-shadow 0.25s;
+  margin-bottom: 1.5rem;
+  border: 1.5px solid var(--border);
+}
+.step-card:hover { transform: translateY(-4px); box-shadow: 0 24px 64px rgba(0,0,0,0.1); }
+
+.step-card-header {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.step-num-block {
+  width: 88px;
+  background: linear-gradient(180deg, var(--teal), #2d9b8e);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+.step-num-block::before {
+  content: '';
+  position: absolute;
+  bottom: -20px; right: -20px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.step-num-block.gold-bg { background: linear-gradient(180deg, #c8a96e, #e8c87a); }
+.step-num-block.rust-bg { background: linear-gradient(180deg, var(--rust), #e8713d); }
+.step-num-block.dark-bg { background: linear-gradient(180deg, #1a1a2e, #2d2d4e); }
+.step-num-block.purple-bg { background: linear-gradient(180deg, #4a1a6e, #7a3aa0); }
+.step-num-block.navy-bg { background: linear-gradient(180deg, #1a4a6e, #2d7aa0); }
+.step-num-block.ink-bg { background: linear-gradient(180deg, var(--ink), #2a2a30); }
+
+.step-number {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+}
+.step-phase-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  margin-top: 4px;
+  text-align: center;
+}
+
+.step-body {
+  padding: 2rem 2.5rem;
+  flex: 1;
+}
+
+.step-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.75rem;
+  border-radius: 100px;
+  background: rgba(26,122,110,0.1);
+  color: var(--teal);
+  margin-bottom: 0.75rem;
+}
+.step-badge.gold { background: rgba(200,169,110,0.15); color: #9a7a3a; }
+
+.step-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.step-desc {
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+/* Substeps inside card */
+.substeps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+.substep {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  transition: background 0.2s;
+}
+.substep:hover { background: rgba(26,122,110,0.06); }
+.substep-dot {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 800;
+  font-family: 'Syne', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.substep-dot.gold { background: var(--gold); color: var(--ink); }
+.substep strong {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.substep p {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.step-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.step-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  background: rgba(200,169,110,0.1);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 10px 10px 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.82rem;
+  color: var(--ink);
+  line-height: 1.6;
+  flex: 1;
+}
+.step-tip strong { color: #9a7a3a; }
+
+.step-action-btn {
+  background: var(--teal);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Instrument Sans', sans-serif;
+  transition: all 0.2s;
+  text-decoration: none;
+  white-space: nowrap;
+  margin-left: 1rem;
+}
+.step-action-btn:hover { background: var(--ink); transform: translateY(-1px); }
+.step-action-btn.gold-btn { background: var(--gold); color: var(--ink); }
+.step-action-btn.gold-btn:hover { background: var(--gold-light); }
+
+/* Two-col inside step */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.info-col {
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+.info-col h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.info-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.info-col ul li {
+  font-size: 0.8rem;
+  color: var(--muted);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.info-col ul li::before {
+  content: '→';
+  color: var(--teal);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Tag strip */
+.tag-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1.5rem;
+}
+.tag {
+  background: rgba(26,122,110,0.1);
+  color: var(--teal);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-family: 'Syne', sans-serif;
+  letter-spacing: 0.05em;
+}
+.tag.gold-tag { background: rgba(200,169,110,0.15); color: #9a7a3a; }
+
+/* Inline code */
+code {
+  font-family: 'Syne', monospace;
+  font-size: 0.8rem;
+  background: rgba(26,122,110,0.1);
+  color: var(--teal);
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* ── FEATURES SECTION (dark grid — same pattern) ── */
+.features {
+  background: var(--ink);
+  color: var(--cream);
+}
+.features .section-label { color: var(--gold); }
+.features .section-label::before { background: var(--gold); }
+.features .section-headline { color: var(--cream); }
+.features .section-sub { color: rgba(245,240,232,0.65); }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5px;
+  margin-top: 4rem;
+  background: rgba(255,255,255,0.08);
+  border-radius: 24px;
+  overflow: hidden;
+}
+.feature-item {
+  background: var(--ink);
+  padding: 2.5rem;
+  transition: background 0.25s;
+}
+.feature-item:hover { background: rgba(26,122,110,0.15); }
+.feature-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: rgba(245,240,232,0.08);
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+.feature-icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
+.feature-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 0.75rem;
+}
+.feature-desc {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: rgba(245,240,232,0.55);
+}
+
+/* ── PRICING TABLE (same 3-tier) ── */
+.pricing { background: var(--cream); }
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 3.5rem;
+  align-items: start;
+}
+.pricing-card {
+  background: white;
+  border-radius: 24px;
+  padding: 2.5rem;
+  border: 1.5px solid var(--border);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.pricing-card:hover { transform: translateY(-6px); box-shadow: 0 24px 64px rgba(0,0,0,0.1); }
+.pricing-card.featured {
+  background: var(--ink);
+  color: var(--cream);
+  border-color: var(--ink);
+  position: relative;
+  transform: translateY(-12px);
+}
+.pricing-card.featured:hover { transform: translateY(-18px); }
+
+.featured-badge {
+  position: absolute;
+  top: -14px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.35rem 1rem;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+
+.pricing-tier {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 1rem;
+}
+.pricing-card.featured .pricing-tier { color: var(--gold); }
+
+.pricing-price {
+  font-family: 'Syne', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+.pricing-card.featured .pricing-price { color: var(--cream); }
+
+.pricing-currency {
+  font-size: 1.5rem;
+  font-weight: 600;
+  vertical-align: top;
+  margin-top: 0.5rem;
+  display: inline-block;
+}
+.pricing-period {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+.pricing-card.featured .pricing-period { color: rgba(245,240,232,0.55); }
+
+.pricing-desc {
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.pricing-card.featured .pricing-desc { color: rgba(245,240,232,0.65); border-color: rgba(255,255,255,0.1); }
+
+.pricing-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+.pricing-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+  color: var(--ink);
+}
+.pricing-card.featured .pricing-features li { color: rgba(245,240,232,0.85); }
+
+.pricing-features li::before {
+  content: '✓';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px; height: 20px;
+  background: rgba(26,122,110,0.12);
+  color: var(--teal);
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.pricing-card.featured .pricing-features li::before {
+  background: rgba(200,169,110,0.2);
+  color: var(--gold-light);
+}
+
+.pricing-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 0.9rem;
+  border-radius: 100px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s;
+  border: 1.5px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+}
+.pricing-btn:hover { background: var(--ink); color: var(--cream); }
+.pricing-card.featured .pricing-btn {
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+}
+.pricing-card.featured .pricing-btn:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(200,169,110,0.4);
+}
+
+/* ── FOOTER (identical) ── */
+footer { background: var(--ink); color: var(--cream); }
+
+.footer-cta {
+  background: var(--teal);
+  padding: 5rem 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.footer-cta::before {
+  content: '';
+  position: absolute;
+  top: -100px; left: -100px;
+  width: 400px; height: 400px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+}
+.footer-cta::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; right: -80px;
+  width: 300px; height: 300px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+}
+.footer-cta h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: white;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+.footer-cta p {
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 2.5rem;
+  font-size: 1.05rem;
+  position: relative;
+  z-index: 1;
+}
+.footer-cta-btns {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  flex-wrap: wrap;
+}
+
+.btn-white {
+  background: white;
+  color: var(--teal);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.9rem 2.25rem;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: all 0.25s;
+}
+.btn-white:hover { background: var(--ink); color: white; transform: translateY(-2px); }
+
+.btn-gold {
+  background: var(--gold);
+  color: var(--ink);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.9rem 2.25rem;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: all 0.25s;
+}
+.btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,169,110,0.4); }
+
+.footer-main {
+  padding: 4rem 4rem 2.5rem;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+  gap: 3rem;
+}
+.footer-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+  margin-bottom: 0.75rem;
+}
+.footer-logo span { color: var(--teal-light); }
+
+.footer-tagline {
+  font-size: 0.875rem;
+  color: rgba(245,240,232,0.55);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.social-links { display: flex; gap: 0.75rem; }
+.social-link {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(245,240,232,0.65);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.social-link:hover { background: var(--teal); color: white; }
+
+.footer-col-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-bottom: 1.25rem;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.footer-links a {
+  color: rgba(245,240,232,0.55);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--teal-light); }
+
+.marketplace-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: rgba(245,240,232,0.65);
+  font-size: 0.78rem;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+  width: fit-content;
+  transition: all 0.2s;
+}
+.marketplace-badge:hover { border-color: var(--teal-light); color: var(--teal-light); }
+
+.footer-contact {
+  font-size: 0.85rem;
+  color: rgba(245,240,232,0.55);
+  line-height: 1.7;
+}
+.footer-contact a { color: var(--teal-light); text-decoration: none; }
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 1.5rem 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-legal { display: flex; gap: 2rem; }
+.footer-legal a {
+  font-size: 0.78rem;
+  color: rgba(245,240,232,0.4);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-legal a:hover { color: rgba(245,240,232,0.7); }
+.footer-copy { font-size: 0.78rem; color: rgba(245,240,232,0.4); }
+
+/* ── VIDEO EMBED ── */
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 0 4rem;
+  aspect-ratio: 16 / 9;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+}
+
+/* ── SCROLL ANIMATIONS ── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
+  .hero-visual { display: none; }
+  section { padding: 4rem 1.5rem; }
+  .overview { grid-template-columns: 1fr; gap: 3rem; }
+  .overview-visual { height: 260px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .pricing-card.featured { transform: none; }
+  .two-col { grid-template-columns: 1fr; }
+  .footer-main { grid-template-columns: 1fr 1fr; padding: 3rem 1.5rem; }
+  .footer-cta { padding: 4rem 1.5rem; }
+  .footer-bottom { padding: 1.25rem 1.5rem; flex-direction: column; text-align: center; }
+  .trust-bar { padding: 1.25rem; gap: 1.25rem; }
+  .step-card-header { flex-direction: column; }
+  .step-num-block { width: 100%; height: 64px; flex-direction: row; gap: 1rem; justify-content: flex-start; padding: 1rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar-line" id="progressLine"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="index.html" class="nav-logo">@Virtu<span>Ally</span></a>
+  <ul class="nav-links">
+    <li><a href="homepage.html" class="nav-back">← Back to VirtuAlly</a></li>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#steps">Step-by-Step</a></li>
+    <li><a href="#tips">Pro Tips</a></li>
+    <li><a href="#pricing">Fees</a></li>
+    <li><a href="https://gumroad.com" target="_blank" class="nav-cta">Open Gumroad ↗</a></li>
+  </ul>
+</nav>
+
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">VirtuAlly Free Resource Guide</div>
+    <h1>Sell Digital Products on <em>Gumroad</em> — The Complete Guide</h1>
+    <p class="hero-sub">From account creation to your very first sale. A step-by-step walkthrough built by @VirtuAlly for virtual assistants and digital creators ready to monetize.</p>
+    <div class="hero-actions">
+      <a href="#steps" class="btn-primary">Start the Tutorial →</a>
+      <a href="https://gumroad.com" target="_blank" class="btn-secondary">Open Gumroad ↗</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <span class="stat-num">7</span>
+        <span class="stat-label">Core Steps</span>
+      </div>
+      <div>
+        <span class="stat-num">Free</span>
+        <span class="stat-label">To Start</span>
+      </div>
+      <div>
+        <span class="stat-num">10%</span>
+        <span class="stat-label">Flat Fee</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <!-- Floating card 1 — Step overview -->
+    <div class="card-float card-main">
+      <div class="card-tag">Tutorial</div>
+      <div class="card-title">Gumroad Step-by-Step</div>
+      <div style="font-size:0.8rem;color:var(--muted);margin-bottom:0.75rem;">7 steps · 15 min read</div>
+      <div class="toc-mini">
+        <div class="toc-mini-item"><span class="toc-mini-dot">1</span> Create Account</div>
+        <div class="toc-mini-item"><span class="toc-mini-dot">2</span> Build Profile</div>
+        <div class="toc-mini-item"><span class="toc-mini-dot">3</span> Upload Product</div>
+        <div class="toc-mini-item"><span class="toc-mini-dot">4</span> Set Pricing</div>
+        <div class="toc-mini-item"><span class="toc-mini-dot">5</span> Get Paid</div>
+      </div>
+    </div>
+    <!-- Floating card 2 — dark -->
+    <div class="card-float card-accent">
+      <div class="card-title">What You Can Sell</div>
+      <div class="step-grid">
+        <div class="step-cell active">PDF</div>
+        <div class="step-cell">MP4</div>
+        <div class="step-cell">ZIP</div>
+        <div class="step-cell">MP3</div>
+        <div class="step-cell gold-active">Course</div>
+        <div class="step-cell">EPUB</div>
+      </div>
+    </div>
+    <!-- Floating card 3 -->
+    <div class="card-float card-small">
+      <div class="card-tag gold">Free to join</div>
+      <div class="card-title" style="font-size:0.9rem;">Gumroad Earnings</div>
+      <div style="font-size:1.3rem;font-weight:800;color:var(--teal);font-family:'Syne',sans-serif;margin-top:4px;">$0 / mo</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;">10% per sale only</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── TRUST BAR ── -->
+<div class="trust-bar">
+  <div class="trust-item"><span>✦</span> 100% free to sign up — no monthly fees</div>
+  <div class="trust-item"><span>✦</span> Sell to a global audience instantly</div>
+  <div class="trust-item"><span>✦</span> Automatic file delivery after purchase</div>
+  <div class="trust-item"><span>✦</span> Built-in payment processing included</div>
+</div>
+
+
+<!-- ── OVERVIEW SECTION (like About) ── -->
+<section class="overview" id="overview">
+  <div class="overview-visual fade-in">
+    <div class="overview-blob"></div>
+    <div class="overview-metric">
+      <span class="metric-num">Free</span>
+      <span class="metric-label">Account Setup</span>
+    </div>
+    <div class="overview-metric">
+      <span class="metric-num">10%</span>
+      <span class="metric-label">Flat Platform Fee</span>
+    </div>
+    <div class="overview-metric">
+      <span class="metric-num">16 GB</span>
+      <span class="metric-label">Max File Size</span>
+    </div>
+  </div>
+
+  <div class="fade-in">
+    <div class="section-label">What is Gumroad?</div>
+    <h2 class="section-headline">The Simplest Way to <em>Sell</em> What You Know</h2>
+    <p class="section-sub">Gumroad is a direct-to-buyer platform that lets you sell digital products, courses, and memberships without needing a website. Perfect for VAs, creators, and coaches.</p>
+
+    <div class="uvp-cards">
+      <div class="uvp-card">
+        <div class="uvp-icon">⚡</div>
+        <div>
+          <div class="uvp-title">Zero Technical Skills Required</div>
+          <p class="uvp-desc">Upload a file, set a price, share a link. Your product can be live and earning within 10 minutes of signing up.</p>
+        </div>
+      </div>
+      <div class="uvp-card">
+        <div class="uvp-icon">💸</div>
+        <div>
+          <div class="uvp-title">No Monthly Subscription</div>
+          <p class="uvp-desc">Gumroad only charges 10% per sale. There are zero upfront or monthly costs — you pay only when you earn.</p>
+        </div>
+      </div>
+      <div class="uvp-card">
+        <div class="uvp-icon">🌍</div>
+        <div>
+          <div class="uvp-title">Built-in Global Audience</div>
+          <p class="uvp-desc">Gumroad's discover feed exposes your products to millions of active buyers — organic traffic included from day one.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── STEPS SECTION ── -->
+<section class="steps-section" id="steps">
+  <div class="steps-header">
+    <div>
+      <div class="section-label">Tutorial</div>
+      <h2 class="section-headline">Your Complete Gumroad <em>Walkthrough</em></h2>
+    </div>
+    <a href="https://gumroad.com" target="_blank" class="btn-secondary" style="white-space:nowrap;">Open Gumroad ↗</a>
+  </div>
+
+  <div class="phase-tabs">
+    <button class="tab active">All Steps</button>
+    <button class="tab">Phase 1 — Setup</button>
+    <button class="tab">Phase 2 — Products</button>
+    <button class="tab">Phase 3 — Selling</button>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step-card fade-in" id="step1">
+    <div class="step-card-header">
+      <div class="step-num-block">
+        <div class="step-number">01</div>
+        <div class="step-phase-label">Setup</div>
+      </div>
+      <div class="step-body">
+        <div class="step-badge">Account Creation</div>
+        <div class="step-title">Create Your Gumroad Account</div>
+        <p class="step-desc">Gumroad is completely free to join. All you need is an email address — your storefront can be live in under 10 minutes.</p>
+
+        <div class="substeps">
+          <div class="substep">
+            <div class="substep-dot">A</div>
+            <div>
+              <strong>Go to gumroad.com</strong>
+              <p>Visit <code>gumroad.com</code> and click <code>Start Selling</code> in the top right corner of the homepage.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">B</div>
+            <div>
+              <strong>Sign up with Email or Google</strong>
+              <p>Enter your email + password, or use "Continue with Google" for a one-click faster sign-up.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">C</div>
+            <div>
+              <strong>Verify your email address</strong>
+              <p>Check your inbox for Gumroad's verification link. Click it to fully activate your account and unlock all features.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">D</div>
+            <div>
+              <strong>Complete the onboarding quiz</strong>
+              <p>Gumroad asks what type of creator you are. Choose the category that best describes your digital products or services.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-footer">
+          <div class="step-tip">
+            <span>✦</span>
+            <span><strong>VirtuAlly Tip:</strong> Use a professional email that matches your VA brand domain — it builds credibility with buyers at checkout.</span>
+          </div>
+          <a href="https://gumroad.com" target="_blank" class="step-action-btn">Sign Up Free →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step-card fade-in" id="step2">
+    <div class="step-card-header">
+      <div class="step-num-block rust-bg">
+        <div class="step-number">02</div>
+        <div class="step-phase-label">Setup</div>
+      </div>
+      <div class="step-body">
+        <div class="step-badge">Profile & Storefront</div>
+        <div class="step-title">Build Your Creator Profile</div>
+        <p class="step-desc">Your Gumroad profile is your storefront. A polished profile builds trust, communicates credibility, and converts visitors into paying buyers.</p>
+
+        <div class="substeps">
+          <div class="substep">
+            <div class="substep-dot">A</div>
+            <div>
+              <strong>Upload a professional photo</strong>
+              <p>Use a high-quality headshot or branded logo. Minimum 400×400px. Square images display best.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">B</div>
+            <div>
+              <strong>Write your creator bio</strong>
+              <p>2–3 sentences: who you are, what you create, and who it's for. Speak directly to your ideal buyer's needs and goals.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">C</div>
+            <div>
+              <strong>Set your custom URL</strong>
+              <p>Go to Settings → Profile to claim <code>gumroad.com/yourname</code>. Keep it short, brand-consistent, and easy to share.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">D</div>
+            <div>
+              <strong>Add social links + cover image</strong>
+              <p>Link your website, Instagram, or LinkedIn. Add a cover banner (1500×500px) to make your page feel like a real brand.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-footer">
+          <div class="step-tip">
+            <span>✦</span>
+            <span><strong>Profile Checklist:</strong> Photo ✓ · Bio ✓ · Custom URL ✓ · Social links ✓ · Cover banner ✓</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step-card fade-in" id="step3">
+    <div class="step-card-header">
+      <div class="step-num-block gold-bg">
+        <div class="step-number">03</div>
+        <div class="step-phase-label">Products</div>
+      </div>
+      <div class="step-body">
+        <div class="step-badge gold">Product Creation</div>
+        <div class="step-title">Create Your First Digital Product</div>
+        <p class="step-desc">Gumroad supports a wide range of digital product types. From your dashboard, click <code>+ New Product</code> to get started building your first listing.</p>
+
+        <div class="two-col">
+          <div class="info-col">
+            <h4>📄 File Products</h4>
+            <ul>
+              <li>PDF guides & templates</li>
+              <li>Excel / Google Sheets</li>
+              <li>Canva templates (PDF/PNG)</li>
+              <li>eBooks & workbooks</li>
+              <li>Swipe files & scripts</li>
+            </ul>
+          </div>
+          <div class="info-col">
+            <h4>🎥 Courses & Content</h4>
+            <ul>
+              <li>Video lessons (MP4)</li>
+              <li>Audio courses (MP3)</li>
+              <li>Mini-courses & workshops</li>
+              <li>Membership content</li>
+              <li>Coaching programs</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="substeps">
+          <div class="substep">
+            <div class="substep-dot gold">1</div>
+            <div>
+              <strong>Choose your product type</strong>
+              <p>Select: Digital Product, Course, Membership, Bundle, or Physical. Most VAs will use Digital Product or Course.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot gold">2</div>
+            <div>
+              <strong>Write a compelling name & description</strong>
+              <p>Lead with the transformation or outcome. Use benefit-focused language. Include keywords your buyer would search.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot gold">3</div>
+            <div>
+              <strong>Upload your product files</strong>
+              <p>Drag and drop files directly. Gumroad supports PDF, ZIP, MP4, MP3, EPUB, PSD, and more. Max file size is 16GB per product.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot gold">4</div>
+            <div>
+              <strong>Design your cover image</strong>
+              <p>Create a 1280×720px (16:9) cover in Canva. Your cover is the #1 factor that drives clicks — invest real time here.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tag-strip">
+          <span class="tag">PDF</span><span class="tag">ZIP</span><span class="tag">MP4</span><span class="tag">MP3</span>
+          <span class="tag">EPUB</span><span class="tag">MOBI</span><span class="tag">PNG</span><span class="tag">PSD</span>
+          <span class="tag gold-tag">Canva</span><span class="tag gold-tag">Notion</span><span class="tag gold-tag">Figma</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step-card fade-in" id="step4">
+    <div class="step-card-header">
+      <div class="step-num-block dark-bg">
+        <div class="step-number">04</div>
+        <div class="step-phase-label">Products</div>
+      </div>
+      <div class="step-body">
+        <div class="step-badge">Pricing Strategy</div>
+        <div class="step-title">Set Your Price & Offer Types</div>
+        <p class="step-desc">Gumroad gives you flexible pricing options — one-time purchases, "pay what you want," recurring subscriptions, and free lead magnets to grow your list.</p>
+
+        <div class="two-col">
+          <div class="info-col">
+            <h4>💰 Pricing Options</h4>
+            <ul>
+              <li>Free (lead magnet / list building)</li>
+              <li>Fixed price (one-time payment)</li>
+              <li>Pay What You Want (set minimum)</li>
+              <li>Subscription / Membership</li>
+            </ul>
+          </div>
+          <div class="info-col">
+            <h4>🎁 Offer Boosters</h4>
+            <ul>
+              <li>Discount codes (e.g. <code>LAUNCH30</code>)</li>
+              <li>Bundle products together</li>
+              <li>Upsell / cross-sell links</li>
+              <li>Quantity-limited deals</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="substeps">
+          <div class="substep">
+            <div class="substep-dot">A</div>
+            <div>
+              <strong>Create a launch discount code</strong>
+              <p>Go to Checkout → Offer Codes. Create a code like <code>LAUNCH30</code> for 30% off. Use it in your first promotional posts to drive early sales.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">B</div>
+            <div>
+              <strong>Set up a subscription product</strong>
+              <p>Select the "Membership" product type to charge monthly or yearly. Great for recurring templates, newsletters, or ongoing resources.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-footer">
+          <div class="step-tip">
+            <span>✦</span>
+            <span><strong>Pricing Tip:</strong> A $7 product often outsells a $5 product because it signals higher value. Avoid pricing below $5 — Gumroad's 10% fee eats into very small margins.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step-card fade-in" id="step5">
+    <div class="step-card-header">
+      <div class="step-num-block purple-bg">
+        <div class="step-number">05</div>
+        <div class="step-phase-label">Payments</div>
+      </div>
+      <div class="step-body">
+        <div class="step-badge">Payment Setup</div>
+        <div class="step-title">Connect Your Bank & Get Paid</div>
+        <p class="step-desc">Before going live, connect your bank account or PayPal so Gumroad knows exactly where to send your earnings. Go to Settings → Payouts to configure this.</p>
+
+        <div class="substeps">
+          <div class="substep">
+            <div class="substep-dot">1</div>
+            <div>
+              <strong>Navigate to Settings → Payouts</strong>
+              <p>Click your profile icon in the Gumroad dashboard, choose Settings, then select the "Payouts" tab.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">2</div>
+            <div>
+              <strong>Connect your bank account</strong>
+              <p>US sellers: add your bank routing + account number. International sellers: connect via PayPal or a Stripe-supported bank.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">3</div>
+            <div>
+              <strong>Submit tax information</strong>
+              <p>US sellers submit a W-9 (SSN or EIN). International sellers submit a W-8BEN form. Gumroad collects and remits applicable taxes on your behalf.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">4</div>
+            <div>
+              <strong>Understand the full fee structure</strong>
+              <p>Gumroad charges a flat 10% per sale. Payment processing adds ~2.9% + $0.30 per transaction. No monthly fee, ever.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="info-col">
+            <h4>💳 Accepted Payments</h4>
+            <ul>
+              <li>Visa / Mastercard / Amex</li>
+              <li>PayPal</li>
+              <li>Apple Pay / Google Pay</li>
+              <li>International cards</li>
+            </ul>
+          </div>
+          <div class="info-col">
+            <h4>📅 Payout Schedule</h4>
+            <ul>
+              <li>Weekly every Friday</li>
+              <li>Minimum $10 payout threshold</li>
+              <li>First payout held 7 days (anti-fraud)</li>
+              <li>Direct bank or PayPal transfer</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step-card fade-in" id="step6">
+    <div class="step-card-header">
+      <div class="step-num-block navy-bg">
+        <div class="step-number">06</div>
+        <div class="step-phase-label">Selling</div>
+      </div>
+      <div class="step-body">
+        <div class="step-badge">Publishing & Sharing</div>
+        <div class="step-title">Publish & Share Your Product</div>
+        <p class="step-desc">Once your product looks good in preview, toggle it to Published and start sharing your link. Gumroad gives you multiple ways to reach buyers — use all of them.</p>
+
+        <div class="substeps">
+          <div class="substep">
+            <div class="substep-dot">A</div>
+            <div>
+              <strong>Preview before publishing</strong>
+              <p>Click "Preview" in the product editor to see exactly what buyers see. Always check mobile view — over 60% of buyers shop on mobile.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">B</div>
+            <div>
+              <strong>Toggle from Draft → Published</strong>
+              <p>Your product is now live at its unique Gumroad URL. Copy the link immediately: <code>gumroad.com/l/your-product</code></p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">C</div>
+            <div>
+              <strong>Embed a checkout button on your website</strong>
+              <p>Use Gumroad's overlay embed code so buyers can checkout without leaving your site. Paste it into any webpage with one line of HTML.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">D</div>
+            <div>
+              <strong>Share across all channels</strong>
+              <p>Drop your link in your Instagram bio (Linktree or direct), email newsletter, Pinterest pins, LinkedIn posts, and Facebook groups.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-footer">
+          <div class="step-tip">
+            <span>🚀</span>
+            <span><strong>Launch Tip:</strong> Don't wait for perfection. Get your first product live, gather real buyer feedback, and iterate from there. Done beats perfect every time.</span>
+          </div>
+          <a href="https://gumroad.com" target="_blank" class="step-action-btn gold-btn">Go Live →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="step-card fade-in" id="step7">
+    <div class="step-card-header">
+      <div class="step-num-block ink-bg">
+        <div class="step-number">07</div>
+        <div class="step-phase-label">Growth</div>
+      </div>
+      <div class="step-body">
+        <div class="step-badge">Growth & Analytics</div>
+        <div class="step-title">Manage Sales & Grow Your Store</div>
+        <p class="step-desc">After your first sale, use Gumroad's built-in tools to track performance, email your buyers, build bundles, and turn one sale into many recurring ones.</p>
+
+        <div class="substeps">
+          <div class="substep">
+            <div class="substep-dot">1</div>
+            <div>
+              <strong>Monitor your Analytics Dashboard</strong>
+              <p>Go to Analytics to track views, conversions, revenue over time, and which traffic sources send buyers. Review weekly.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">2</div>
+            <div>
+              <strong>Email your past buyers (for free)</strong>
+              <p>Use Gumroad's built-in email tool to send updates, new product drops, or exclusive offers to your buyer list — zero extra cost.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">3</div>
+            <div>
+              <strong>Collect reviews to boost conversions</strong>
+              <p>After purchase, Gumroad auto-emails buyers for a review. Positive reviews dramatically increase conversion rates on your page.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">4</div>
+            <div>
+              <strong>Bundle products for higher AOV</strong>
+              <p>Once you have 2+ products, create a bundle at a discount. Bundles increase average order value and make value obvious to buyers.</p>
+            </div>
+          </div>
+          <div class="substep">
+            <div class="substep-dot">5</div>
+            <div>
+              <strong>Launch an affiliate program</strong>
+              <p>Go to your product → Affiliates and let others promote for a commission you control. Automated passive promotion at zero extra effort.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-footer">
+          <div class="step-tip">
+            <span>📈</span>
+            <span><strong>Growth Formula:</strong> 1 hero product + email list growth + consistent content = compounding Gumroad revenue. Your first $100 is the hardest. Stay consistent.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+  <!-- YouTube Video Embed -->
+  <div class="video-container">
+    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/M_m-UvkJiJI" title="Gumroad Tutorial" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+
+
+<!-- ── FEATURES / PRO TIPS (dark section) ── -->
+<section class="features" id="tips">
+  <div class="section-label">Pro Tips</div>
+  <h2 class="section-headline" style="color:var(--cream);">6 Things That Make Your <em style="color:var(--gold);">Store Succeed</em></h2>
+  <p class="section-sub">These are the non-obvious moves that separate top-performing Gumroad stores from ones that go silent after launch.</p>
+
+  <div class="features-grid fade-in">
+    <div class="feature-item">
+      <div class="feature-num">01</div>
+      <span class="feature-icon">🎨</span>
+      <div class="feature-title">Invest in Your Cover Image</div>
+      <p class="feature-desc">Your cover is your product's billboard. A Canva-designed 1280×720px cover can double click-through rates versus a plain screenshot or no image.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">02</div>
+      <span class="feature-icon">📧</span>
+      <div class="feature-title">Start Free, Build Your List</div>
+      <p class="feature-desc">Offer one product for free to collect email subscribers. Then sell to that warm list when you launch your paid products. Email converts 3–5× better than social.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">03</div>
+      <span class="feature-icon">💬</span>
+      <div class="feature-title">Use Social Proof Early</div>
+      <p class="feature-desc">Send your product to 3–5 friends or beta users for free, ask for an honest review, and add those reviews to your listing before your public launch.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">04</div>
+      <span class="feature-icon">🔁</span>
+      <div class="feature-title">Create a Product Suite</div>
+      <p class="feature-desc">Plan a starter product ($7–$25), a core offer ($47–$97), and a premium bundle ($150+). Give buyers a natural upgrade path within your store.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">05</div>
+      <span class="feature-icon">📌</span>
+      <div class="feature-title">Pin Links Everywhere</div>
+      <p class="feature-desc">Put your Gumroad store link in your Instagram bio, LinkedIn About, TikTok bio, email signature, and every content piece you publish. Visibility = sales.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">06</div>
+      <span class="feature-icon">🔄</span>
+      <div class="feature-title">Update Products Regularly</div>
+      <p class="feature-desc">Improve and re-release your digital products. Existing buyers get the update free — this creates goodwill, word-of-mouth, and repeat purchases.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── PRICING SECTION ── -->
+<section class="pricing" id="pricing">
+  <div class="section-label">Gumroad Fees</div>
+  <h2 class="section-headline">Simple, <em>Transparent</em> Fee Structure</h2>
+  <p class="section-sub">Gumroad's pricing is straightforward. No monthly fee, no setup cost — you only pay when you earn.</p>
+
+  <div class="pricing-grid fade-in">
+    <!-- Free -->
+    <div class="pricing-card">
+      <div class="pricing-tier">Free Account</div>
+      <div class="pricing-price"><span class="pricing-currency">$</span>0</div>
+      <div class="pricing-period">monthly cost — forever</div>
+      <p class="pricing-desc">Create your storefront, upload products, and build your audience with zero upfront investment.</p>
+      <ul class="pricing-features">
+        <li>Unlimited products</li>
+        <li>Built-in payment processing</li>
+        <li>Automatic file delivery</li>
+        <li>Email your buyers</li>
+        <li>Analytics dashboard</li>
+      </ul>
+      <a href="https://gumroad.com" target="_blank" class="pricing-btn">Create Free Account</a>
+    </div>
+
+    <!-- Featured — what they pay per sale -->
+    <div class="pricing-card featured">
+      <div class="featured-badge">✦ Only Fee You Pay</div>
+      <div class="pricing-tier">Per Sale Fee</div>
+      <div class="pricing-price"><span class="pricing-currency">1</span>0%</div>
+      <div class="pricing-period">of each sale + payment processing</div>
+      <p class="pricing-desc">Gumroad takes 10% of every sale. Payment processing adds ~2.9% + $0.30 per transaction. That's it — no hidden charges.</p>
+      <ul class="pricing-features">
+        <li>10% platform fee per sale</li>
+        <li>~2.9% + $0.30 card processing</li>
+        <li>PayPal processing varies</li>
+        <li>Weekly Friday payouts</li>
+        <li>$10 minimum payout threshold</li>
+        <li>First payout held 7 days</li>
+      </ul>
+      <a href="https://gumroad.com" target="_blank" class="pricing-btn">Start Selling →</a>
+    </div>
+
+    <!-- Tip: maximize earnings -->
+    <div class="pricing-card">
+      <div class="pricing-tier">Maximize Earnings</div>
+      <div class="pricing-price"><span class="pricing-currency">↑</span></div>
+      <div class="pricing-period">strategies to keep more revenue</div>
+      <p class="pricing-desc">Simple tactics to offset fees and earn more per product without raising your price.</p>
+      <ul class="pricing-features">
+        <li>Price above $10 to absorb fees</li>
+        <li>Bundle products to raise AOV</li>
+        <li>Use affiliates for zero-cost traffic</li>
+        <li>Offer subscriptions for recurring income</li>
+        <li>Build email list for repeat buyers</li>
+      </ul>
+      <a href="#steps" class="pricing-btn">Back to Tutorial ↑</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-cta">
+    <h2>Ready to Make Your First Gumroad Sale?</h2>
+    <p>Return to @VirtuAlly for more guides, templates, and resources to grow your VA business.</p>
+    <div class="footer-cta-btns">
+      <a href="https://gumroad.com" target="_blank" class="btn-white">Open Gumroad →</a>
+      <a href="index.html" class="btn-gold">✦ Back to VirtuAlly</a>
+    </div>
+  </div>
+
+  <div class="footer-main">
+    <div>
+      <div class="footer-logo">@Virtu<span>Ally</span></div>
+      <p class="footer-tagline">Empowering creators with actionable digital tools. Learn, apply, and grow your VA business.</p>
+      <div class="social-links">
+        <a href="#" class="social-link">📸</a>
+        <a href="#" class="social-link">🎵</a>
+        <a href="#" class="social-link">💼</a>
+        <a href="#" class="social-link">▶</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Tutorial Steps</div>
+      <ul class="footer-links">
+        <li><a href="#step1">01 — Create Account</a></li>
+        <li><a href="#step2">02 — Build Profile</a></li>
+        <li><a href="#step3">03 — Upload Product</a></li>
+        <li><a href="#step4">04 — Set Pricing</a></li>
+        <li><a href="#step5">05 — Get Paid</a></li>
+        <li><a href="#step6">06 — Publish & Share</a></li>
+        <li><a href="#step7">07 — Manage & Grow</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="footer-col-title">VirtuAlly Platforms</div>
+      <div style="display:flex;flex-direction:column;gap:0.5rem;">
+        <a href="#" class="marketplace-badge">🇵🇭 Raket.PH</a>
+        <a href="https://gumroad.com" target="_blank" class="marketplace-badge">💸 Gumroad</a>
+        <a href="#" class="marketplace-badge">🛍️ Etsy</a>
+        <a href="#" class="marketplace-badge">📦 Payhip</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Support & Links</div>
+      <div class="footer-contact">
+        <p style="margin-bottom:0.75rem;">Need help? We're here.</p>
+        <p>📧 <a href="mailto:hello@virtually.com">hello@virtually.com</a></p>
+        <p style="margin-top:0.5rem;">💼 <a href="mailto:collab@virtually.com">collab@virtually.com</a></p>
+        <p style="margin-top:1rem;font-size:0.78rem;opacity:0.5;">Response within 24 hours</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-legal">
+      <a href="#">Terms of Service</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Refund Policy</a>
+      <a href="#">License Agreement</a>
+    </div>
+    <div class="footer-copy">© 2025 @VirtuAlly. All rights reserved. · Gumroad Tutorial Guide</div>
+  </div>
+</footer>
+
+
+<script>
+// ── Scroll Progress Bar ──
+const bar = document.getElementById('progressLine');
+window.addEventListener('scroll', () => {
+  const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+  bar.style.width = pct + '%';
+});
+
+// ── Scroll Fade-in (identical to VirtuAlly site) ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── Phase Tab Filter ──
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const label = tab.textContent.trim();
+    const cards = document.querySelectorAll('.step-card');
+
+    cards.forEach(card => {
+      if (label === 'All Steps') {
+        card.style.display = '';
+      } else if (label === 'Phase 1 — Setup') {
+        const badge = card.querySelector('.step-phase-label');
+        card.style.display = badge && badge.textContent === 'Setup' ? '' : 'none';
+      } else if (label === 'Phase 2 — Products') {
+        const badge = card.querySelector('.step-phase-label');
+        card.style.display = badge && badge.textContent === 'Products' ? '' : 'none';
+      } else if (label === 'Phase 3 — Selling') {
+        const badge = card.querySelector('.step-phase-label');
+        card.style.display = (badge && (badge.textContent === 'Payments' || badge.textContent === 'Selling' || badge.textContent === 'Growth')) ? '' : 'none';
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
